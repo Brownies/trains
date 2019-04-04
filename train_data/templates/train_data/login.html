@@ -6,8 +6,8 @@
 </head>
 <body>
     {% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
+    <p>Your username and password didn't match. Please try again.</p>
+    {% endif %}
 
 {% if next %}
     {% if user.is_authenticated %}
@@ -18,7 +18,7 @@
     {% endif %}
 {% endif %}
 
-<form method="post" action="login">
+<form method="post" action="">
 {% csrf_token %}
 <table>
 <tr>
@@ -32,7 +32,7 @@
 </table>
 
 <input type="submit" value="login">
-<input type="hidden" name="next" value="{{ next }}">
+<input type="hidden" name="next" value="..">
 </form>
 
 </body>

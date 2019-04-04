@@ -1,8 +1,9 @@
 import json
 
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.template import loader
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 
 from .models import Train
@@ -36,10 +37,19 @@ def index(request):
 def register(request):
     if request.method == 'GET':
         template = loader.get_template('train_data/register.html')
-        return HttpResponse(template.render({}, request))
+        context = {'form': UserCreationForm()}
+        return HttpResponse(template.render(context, request))
 
     elif request.method == 'POST':
-        pass
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            email = form.cleaned_data.get('email')
+            return HttpResponse("Registration succesful. <a href=\"..\">return to front page</a>")
+        else:
+            return HttpResponse("invalid form")
 
     else:
         return HttpResponseBadRequest()
