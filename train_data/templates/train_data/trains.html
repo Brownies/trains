@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trains</title>
+</head>
+<body>
+{% if train_list %}
+    <table cellspacing="10">
+        <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>destination</th>
+            <th>speed</th>
+            <th>latitude</th>
+            <th>longitude</th>
+            <th>last updated</th>
+        </tr>
+
+        {% for train in train_list %}
+        <tr>
+            <td>{{ train.id }}</td>
+            <td>{{ train.name }}</td>
+            <td>{{ train.destination }}</td>
+            <td>{{ train.speed }}</td>
+            <td>{{ train.latitude }}</td>
+            <td>{{ train.longitude }}</td>
+            <td>{{ train.time }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% else %}
+    <p>No trains are available.</p>
+{% endif %}
+</body>
+</html>
