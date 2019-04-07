@@ -1,11 +1,11 @@
 import json
 
-from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.template import loader
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
 
+from datetime import datetime
 from .models import Train
 from .forms import UserForm
 
@@ -14,6 +14,7 @@ from .forms import UserForm
 def display_trains(request):
     if request.method != 'GET':
         return HttpResponse("Method not allowed.", status=405)
+
     train_list = Train.objects.all()
     print(len(train_list))
     template = loader.get_template('train_data/trains.html')
@@ -21,11 +22,26 @@ def display_trains(request):
     return HttpResponse(template.render(context, request))
 
 
+@csrf_exempt
 def insert_train(request, train_id):
     if request.method != 'PUT':
         return HttpResponse("Method not allowed. Use PUT", status=405)
     elif request.content_type != 'application/json':
         return HttpResponseBadRequest("Request content type is not application/json")
+
+    data = json.loads(request.body.decode('utf-8'))
+
+    train = Train(
+        id=train_id,
+        name=data['name'],
+        destination=data['destination'],
+        speed=data['speed'],
+        latitude=data['coordinates'][0],
+        longitude=data['coordinates'][1],
+        time=timezone.now()
+    )
+    train.save()
+    return HttpResponse("OK")
 
 
 def index(request):
