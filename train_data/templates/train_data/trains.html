@@ -5,9 +5,8 @@
     <title>Trains</title>
 </head>
 <body>
-{% if train_list %}
     <table cellspacing="10">
-        <tr>
+        <thead><tr>
             <th>id</th>
             <th>name</th>
             <th>destination</th>
@@ -15,8 +14,10 @@
             <th>latitude</th>
             <th>longitude</th>
             <th>last updated</th>
-        </tr>
+        </tr></thead>
 
+        <tbody id="trains">
+        {% if train_list %}
         {% for train in train_list %}
         <tr>
             <td>{{ train.id }}</td>
@@ -28,12 +29,14 @@
             <td>{{ train.time }}</td>
         </tr>
         {% endfor %}
+        {% endif %}
+        </tbody>
     </table>
     <div>
     <a href="../logout">logout</a>
     </div>
-{% else %}
-    <p>No trains are available.</p>
-{% endif %}
+
+    {% load static %}
+    <script src="{% static "train_data/update_trains.js" %}"></script>
 </body>
 </html>

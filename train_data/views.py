@@ -3,23 +3,29 @@ import json
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.http import JsonResponse
 
-from datetime import datetime
 from .models import Train
 from .forms import UserForm
 
 
-# @login_required(login_url="login")
+@login_required(login_url="../login/")
 def display_trains(request):
     if request.method != 'GET':
         return HttpResponse("Method not allowed.", status=405)
 
-    train_list = Train.objects.all()
-    print(len(train_list))
-    template = loader.get_template('train_data/trains.html')
-    context = {'train_list': train_list}
-    return HttpResponse(template.render(context, request))
+    elif not request.is_ajax():
+        train_list = Train.objects.all()
+        template = loader.get_template('train_data/trains.html')
+        context = {'train_list': train_list}
+        return HttpResponse(template.render(context, request))
+
+    else:
+        print("ajax request")
+        train_list = list(Train.objects.values())
+        return JsonResponse(train_list, safe=False)
 
 
 @csrf_exempt
@@ -29,8 +35,10 @@ def insert_train(request, train_id):
     elif request.content_type != 'application/json':
         return HttpResponseBadRequest("Request content type is not application/json")
 
-    data = json.loads(request.body.decode('utf-8'))
-
+    encoding = request.encoding
+    if not encoding:
+        encoding = 'utf-8'
+    data = json.loads(request.body.decode(encoding))
     train = Train(
         id=train_id,
         name=data['name'],
