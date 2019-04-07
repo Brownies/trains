@@ -9,13 +9,14 @@
     <div>
         {% if user.is_authenticated %}
         <a href="/">front page</a>
-        <a href="/trains">view trains</a><br>
+        <a href="/trains">view trains</a>
         <a href="/logout">logout</a>
         {% else %}
         <a href="/login">login</a>
         <a href="/register">register</a>
         {% endif %}
     </div>
+    <br>
     {% block content %}
     {% endblock %}
 </body>

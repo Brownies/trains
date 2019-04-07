@@ -31,4 +31,10 @@ function update_table(xhr) {
     }
 }
 
-setInterval(make_request, 5000);
+let timer = setInterval(make_request, 5000);
+
+function update_timer() {
+    let time = document.getElementById("timer_select").value;
+    clearTimeout(timer);
+    timer = setInterval(make_request, time * 1000);
+}
