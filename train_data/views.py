@@ -12,6 +12,8 @@ from .forms import UserForm
 
 # @login_required(login_url="login")
 def display_trains(request):
+    if request.method != 'GET':
+        return HttpResponse("Method not allowed.", status=405)
     train_list = Train.objects.all()
     print(len(train_list))
     template = loader.get_template('train_data/trains.html')
@@ -20,13 +22,15 @@ def display_trains(request):
 
 
 def insert_train(request, train_id):
-    if request.methold != 'PUT':
-        return HttpResponseBadRequest("Invalid request method")
+    if request.method != 'PUT':
+        return HttpResponse("Method not allowed. Use PUT", status=405)
     elif request.content_type != 'application/json':
         return HttpResponseBadRequest("Request content type is not application/json")
 
 
 def index(request):
+    if request.method != 'GET':
+        return HttpResponse("Method not allowed.", status=405)
     if not request.user.is_authenticated:
         template = loader.get_template('train_data/login_or_register.html')
         return HttpResponse(template.render({}, request))
@@ -52,4 +56,4 @@ def register(request):
             return HttpResponse("invalid form")
 
     else:
-        return HttpResponseBadRequest()
+        return HttpResponse("Method not allowed.", status=405)
