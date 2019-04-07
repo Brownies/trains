@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+{% extends "train_data/base.html" %}
+{% block title %}
     <title>Trains</title>
-</head>
-<body>
+{% endblock %}
+{% block content %}
+    {% load static %}
+    <script src="{% static "train_data/update_trains.js" %}"></script>
     <table cellspacing="10">
         <thead><tr>
             <th>id</th>
@@ -32,11 +32,4 @@
         {% endif %}
         </tbody>
     </table>
-    <div>
-    <a href="../logout">logout</a>
-    </div>
-
-    {% load static %}
-    <script src="{% static "train_data/update_trains.js" %}"></script>
-</body>
-</html>
+{% endblock %}

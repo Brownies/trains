@@ -1,22 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "train_data/base.html" %}
+{% block title %}
+    <title>Trains</title>
+{% endblock %}
+{% block content %}
     <div>
     Logged in as: {{ request.user.username }}<br>
     First name: {{ request.user.first_name }}<br>
     Last name: {{ request.user.last_name }}<br>
     email: {{ request.user.email }}
     </div>
-
-
-    <div>
-    <a href="trains">view trains</a><br>
-    <a href="logout">logout</a>
-    </div>
-
-</body>
-</html>
+{% endblock %}

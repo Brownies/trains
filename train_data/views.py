@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.http import JsonResponse
+from django.forms import ValidationError
 
 from .models import Train
 from .forms import UserForm
@@ -23,7 +24,6 @@ def display_trains(request):
         return HttpResponse(template.render(context, request))
 
     else:
-        print("ajax request")
         train_list = list(Train.objects.values())
         return JsonResponse(train_list, safe=False)
 
@@ -33,7 +33,7 @@ def insert_train(request, train_id):
     if request.method != 'PUT':
         return HttpResponse("Method not allowed. Use PUT", status=405)
     elif request.content_type != 'application/json':
-        return HttpResponseBadRequest("Request content type is not application/json")
+        return HttpResponseBadRequest("Content type must be application/json")
 
     encoding = request.encoding
     if not encoding:
@@ -48,7 +48,10 @@ def insert_train(request, train_id):
         longitude=data['coordinates'][1],
         time=timezone.now()
     )
-    train.save()
+    try:
+        train.save()
+    except ValidationError:
+        return HttpResponseBadRequest("Unable to create train. Check your json.")
     return HttpResponse("OK")
 
 

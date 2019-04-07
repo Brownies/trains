@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Please login or register</title>
-</head>
-<body>
-    <p>Please <a href="/login">login</a> or <a href="/register">register</a>.</p>
-</body>
-</html>
+{% extends "train_data/base.html" %}
+{% block title %}
+    <title>Please login on register</title>
+{% endblock %}
+{% block content %}
+    <p>Please login or register</p>
+{% endblock %}
