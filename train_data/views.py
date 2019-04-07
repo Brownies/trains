@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 
 from .models import Train
+from .forms import UserForm
 
 
 # @login_required(login_url="login")
@@ -37,17 +38,16 @@ def index(request):
 def register(request):
     if request.method == 'GET':
         template = loader.get_template('train_data/register.html')
-        context = {'form': UserCreationForm()}
+        context = {
+            'form': UserForm(),
+        }
         return HttpResponse(template.render(context, request))
 
     elif request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserForm(request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            email = form.cleaned_data.get('email')
-            return HttpResponse("Registration succesful. <a href=\"..\">return to front page</a>")
+            return HttpResponse("Registration successful. <a href=\"..\">return to front page</a>")
         else:
             return HttpResponse("invalid form")
 
