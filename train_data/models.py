@@ -9,7 +9,7 @@ class Train(models.Model):
     speed = models.DecimalField(max_digits=6, decimal_places=2)
     latitude = models.DecimalField(max_digits=10, decimal_places=8)
     longitude = models.DecimalField(max_digits=10, decimal_places=8)
-    time = models.DateTimeField(auto_now_add=True)
+    time = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['-time']

@@ -4,7 +4,6 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from django.utils import timezone
 from django.http import JsonResponse
 from django.forms import ValidationError
 
@@ -12,7 +11,7 @@ from .models import Train
 from .forms import UserForm
 
 
-@login_required(login_url="../login/")
+@login_required(login_url="/login")
 def display_trains(request):
     if request.method != 'GET':
         return HttpResponse("Method not allowed.", status=405)
@@ -39,18 +38,18 @@ def insert_train(request, train_id):
     if not encoding:
         encoding = 'utf-8'
     data = json.loads(request.body.decode(encoding))
-    train = Train(
-        id=train_id,
-        name=data['name'],
-        destination=data['destination'],
-        speed=data['speed'],
-        latitude=data['coordinates'][0],
-        longitude=data['coordinates'][1],
-        time=timezone.now()
-    )
     try:
+        train = Train(
+            id=train_id,
+            name=data['name'],
+            destination=data['destination'],
+            speed=data['speed'],
+            latitude=data['coordinates'][0],
+            longitude=data['coordinates'][1]
+        )
+
         train.save()
-    except ValidationError:
+    except (ValidationError, KeyError):
         return HttpResponseBadRequest("Unable to create train. Check your json.")
     return HttpResponse("OK")
 
